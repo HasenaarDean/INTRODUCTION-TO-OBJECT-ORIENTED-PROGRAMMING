@@ -1,0 +1,125 @@
+hasenaar
+
+
+AvlTree.java: This class is an implementation of the AVL tree data structure for integers. 
+ 
+
+README:   This file. 
+
+
+
+Design: 
+
+In class AvlTree I built a nested class called TreeNode. 
+
+The AvlTree class uses the TreeNode object in this way: the node holds an int value and has a link 
+
+to left son, right son and parent. It also holds the height and the balance in the AvlTree. 
+
+This node is the object I used in order to represent a juncture in a binary tree. 
+
+
+Implementation Issues:   
+
+I had some implementation issues while implementing the add and delete functions, which I will 
+
+describe right now: 
+
+
+Description of my implementation of the methods add and delete: 
+
+add method: 
+
+If the Avl Tree is empty, then the root is updated to be the added new value. 
+
+
+Else, if the data already exists in the Avl Tree then the method returns false.
+
+If not, then if the temporary node data I assigned as the root is lower then the given data, then 
+
+the temporary node is assigned as the left child of the root, right otherwise. we repeat this 
+
+process and do a binary search. If we end the process with null, then it means the input value is 
+
+not already in the tree, so we add it in the place we found, else we return false, because the given 
+
+value is already in the AVL Tree. After the addition (if there was one) we update the AVL Tree's size 
+
+and then rebalance the tree by calling the method keepbalanced() which uses the algorithms of left / 
+
+right / LR / RL rotations if there was a violation of the AVL Tree's balance, and fixes the nodes 
+
+heights respectively. and finally we return true (after the addition, if there was one).    
+
+
+delete method: At first, we check if the tree is empty. In this case we return false. 
+
+Else, we do a binary search in the same way of the add method, to check if the value is in the tree 
+
+(if not - it means we encounter null and return null). 
+
+And so, if the value was found in the tree, we delete it by using the algorithm we learnt in DAST 
+
+class, by finding the successor of the node to delete (in the helper method deleteNode()) and store 
+
+its value in the node we want to delete, and finally we delete the successor node by calling 
+
+recursively to the helper function deleteNode(). 
+
+
+
+Answers to Questions:   
+
+-Analyzing the AVL tree: 
+
+A series of 12 numbers, such that when they are inserted into an empty AVL tree one-by-one, 
+
+the result will be a tree of height 4: 
+
+The series I found is: 5, 3, 8, 2, 4, 7, 10, 1, 6, 9, 11, 12.  
+
+
+-The complexity of constructing an AVL tree: 
+
+Answer to question 1 in this section: creating a node from a list takes O(1), so n nodes will 
+
+take O(n), because the tree is balanced, the time to find a place for a new node is O(logn) 
+
+(because the hight of the tree is log(n)), and all together takes O(n*logn). 
+
+Answer to question 2 in this section: The iterator stores all the tree's nodes values in a list, and 
+
+it takes O(n). after that, it goes over the list and insert every node and it takes O(n*logn). So 
+
+all together takes O(n) + O(n*logn) = O(n*logn). 
+
+
+-UML Submission Requirements: 
+
+I changed my design because I had some good reasons: 
+
+I decided to use TreeNode as the nested class of AvlNode because this class is relevant only for the 
+
+implementation of the AvlNode, and also in this way I could define the TreeNode class being a private 
+
+class and still have access to it in the external class AvlNode. 
+
+
+-Adressing more design points:
+
+Description of the other classes (except AvlTree) I wrote as part of the implementation of an AVL tree: 
+
+private class TreeNode: This is a nested class of AvlTree. It is a private class that used only by 
+
+class AvlTree (and therfore it is a nested class of AvlTree), which represents the nodes of the 
+
+AvlTree. It stores the node's data (integer), its parent (or null if it is the root), its left and 
+
+right sons (or null if they don't exist), its height in the tree and its balance in the tree. 
+
+In addition, my AvlTree class implemented class Iterable<Integer>: I implemented the method 
+
+iterator() and as a result the AvlTree is iterable.  
+
+
+

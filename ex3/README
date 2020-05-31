@@ -1,0 +1,259 @@
+hasenaar
+
+
+SimpleHashSet.java: This class is an abstract class of a simple hash set, which OpenHashSet and 
+
+ClosedHashSet inherits from. It represents an abstract simple data structure of a hash set.
+ 
+
+OpenHashSet.java:   This class represents an Open hash set, which inherits from SimpleHashSet. 
+
+
+ClosedHashSet.java:   This class represents a closed hash set, which inherits from SimpleHashSet. 
+
+
+CollectionFacadeSet.java:   This class wraps an underlying Collection and serves to both simplify 
+
+its API and give it a common type with the implemented SimpleHashSets. 
+
+
+SimpleSetPerformanceAnalyzer.java:   This class compares the performances of the following data 
+
+structures: OpenHashSet, ClosedHashSet, Java's LinkedList, Java's HashSet and Java's TreeSet. 
+
+
+LinkedListArray.java:   This class represents a linked list data structure. We use this class in 
+
+order to create an array of linked lists. Each object in this class is a Java's linked list. 
+
+In this way I could work with an array of linked list objects as the open hash set table. it has 
+
+the methods add, contains, delete and getIterator, which are described within the Java file itself. 
+
+
+RESULTS:   In this file we have all the tests' results. 
+
+
+README:   This file. 
+
+
+
+Design: 
+
+My design allows the implementation of the minimal API principle, because of these reasons: 
+
+Open hash set and closed hash set implement simple hash set, which itself implements simple set. 
+
+Java's data structures and my open and closed hash sets are wrapped by collection facade set, 
+
+which means they all implement a facade interface. This design allows us to work on all the 
+
+data structures I mentioned above all together.   
+
+
+Implementation Issues:   
+
+I had some implementation issues while implementing the CollectionFacadeSet: 
+
+At first, I assumed that it is enough only to have a collection object within the constructor of the 
+
+facade and use Java's collection's methods (remove, add, contains, size etc), but then I realized 
+
+that not all the wrapped data structures behave the same: for example, adding items to a linked list 
+
+is very different from adding items to a set, because in Java's linked list, its add method 
+
+doesn't check if the item is already in the list, so I had to change my facade's add method 
+
+respectively. 
+
+
+
+Answers to Questions:   
+
+How I implemented OpenHashSet's table: 
+
+In order to have an array of linked lists, I created the class LinkedListArray, in which 
+
+each object is a Java's linked list. In this way I could work with an array of linked list objects 
+
+as the Open Hash Set table. 
+
+
+How I implemented the deletion mechanism in ClosedHashSet: 
+
+I added to the ClosedHashSet class a field which is a constant string: "The item was deleted", and 
+
+any time an item is deleted, this string is assigned instead of the item that was in the 
+
+ClosedHashSet's cell before. I avoided using the String.equals() method because this method checks 
+
+whether or not two strings have the same content, and instead I used str1 == str2, while as str2 I 
+
+assigned the ITEM_WAS_DELETED field. In this way, I made sure that the two strings are two references 
+
+to the exact same object in memory, and even if the ClosedHashSet contains a string "The item was 
+
+deleted", but it is a different string from the constant ITEM_WAS_DELETED, it won't be considered 
+
+as a deleted item as long as the user does not actually delete it. 
+
+
+In this wat I also prevented this situation: 
+
+Let's assume we have two strings, str1 and str2, and they both have the same hash code. 
+
+if str1 is added, and then str2 is added in a cell after str1, and then str1 is deleted, so while 
+
+seaching if str2 is in the set, it will encounter null (str1 previous place) and thus will return 
+
+false. I prevented it by filling the cell with the deleted string with the constant string 
+
+ITEM_WAS_DELETED, as I mntioned before. 
+
+
+BONUS
+
+The Warm-up made the most difference for ClosedHashSet: it reduced the search running time of the 
+
+negative number in data 1 from 1976258 ns to 1646475 ns. 
+
+It also reduced the search running time of "hi" in data 1 from 102 ns to 43 ns. 
+
+It also reduced the search running time of "hi" in data 2 from 70 ns to 27 ns.  
+
+
+
+The results of the analysis: (*the accurate results are added in a seperate file called RESULTS). 
+
+
+OpenHashSet’s and ClosedHashSet’s bad results for data1.txt: 
+
+OpenHashSet's bad results for data1 were these: inserting data1 to OpenHashSet took a lot of time 
+
+(118825 ms), and also checking if the string "-13170890158" is in the OpenHashSet took a lot of time 
+
+(1141943 ns). 
+
+ClosedHashSet’s bad results for data1 were these: inserting data1 to ClosedHashSet took a lot of time 
+
+(185528 ms), and also checking if the string "-13170890158" is in the ClosedHashSet took a lot of 
+time (1646475 ns). 
+
+
+The strengths and weaknesses of each of the data structures, and which I'd use for which purpose: 
+
+
+Java's Linked List: 
+
+Adding and searching running times are bad. However, according to the results it is best to use it 
+
+when we have a database with uniform hash codes. 
+
+
+Java's Tree Set: 
+
+Excellent adding and search times. I'd like to use it any time. 
+
+
+Java's Hash Set: 
+
+Excellent adding and search times. I'd like to use it any time. 
+
+
+Open Hash Set: 
+
+It has good search running time on database with varying hash codes. However, it has bad running 
+
+time for adding database with the same hash codes. Therefore I'd use it for databases with 
+
+varying hash codes. 
+
+
+Closed Hash Set: 
+
+It has bad running time while adding a database with varying hash codes or searching in this 
+
+situation. However, it has good running time while adding / searching with database with uniform 
+
+hash codes. Thus I'd like to use it with databases with uniform hash codes, for example with 
+
+a database which has lots of repetitions. 
+
+
+How did my two implementations compare between themselves: 
+
+ClosedHasSet inserted data1 in 185528 ms, whereas OpenHasSet did so in 118825 ms (almost halved time).
+
+ClosedHasSet inserted data2 in 24 ms, whereas OpenHasSet did so in 51 ms (more than doubled time). 
+
+While searching "hi" (data 2) in ClosedHasSet, it took 27 ns, whereas OpenHasSet did so in 9 ns 
+
+only. while searching for "hi" (data 1) in ClosedHasSet, it took 43 ns, whereas OpenHasSet did so in 
+
+25 ns only. 
+
+while searching "23" (data 2), it took for ClosedHasSet and OpenHasSet 27 ns. 
+
+while searching "-13170890158" (data 1), it took ClosedHasSet 1646475 ns, and it took OpenHasSet 
+
+1141943 ns. 
+
+I assume the differences between ClosedHasSet and OpenHasSet are derived from their behaviour when 
+
+dealing with a database with uniform hash codes or varying hash codes: 
+
+As we can see, ClosedHasSet behaves better with uniform hash codes, while OpenHasSet behaves better 
+
+with varying hash codes. 
+
+
+How did my implementations compare to Java’s built in HashSet: 
+
+
+In one case, my implementations were better than Java's built in HashSet: 
+
+While searching if "hi" (data 1) is in OpenHashSet, it took 25 ns, whereas the same thing took 
+
+Java's built in HashSet 38 ns. 
+
+However, in most of the other cases Java’s built in HashSet was much more faster than my 
+
+implementations, simetimes even 60,000 times faster (!) than my implementations. 
+
+So as we can see, Java’s built in HashSet implementation is perfect in all tests. 
+
+
+
+
+What results surprised me and which did I expect: 
+
+I expected that my two implementations will be much worse than Java’s built in HashSet and TreeSet.
+
+I was surprised to see how bad linked list are in most cases. 
+
+I expected OpenHashSet to work badly with uniform hash codes. 
+
+I was surprised to see that my implementation for OpenHashSet beat Java’s built in HashSet 
+
+implementation, While searching if "hi" (data 1) is in OpenHashSet and Java’s built in HashSet. 
+
+
+Did I find java’s HashSet performance on data1.txt surprising? Can I explain it? 
+
+
+As I mentioned before, I was surprised to see that my implementation for OpenHashSet beat Java’s 
+
+built in HashSet implementation, While searching if "hi" (data 1) is in OpenHashSet and Java’s 
+
+built in HashSet. It took to my implementation of OpenHashSet 25 ns, whereas the same thing took 
+
+Java's built in HashSet 38 ns. 
+
+
+
+In addition, I didn't try clamping expressions to valid indices in more than one way. 
+
+
+
+

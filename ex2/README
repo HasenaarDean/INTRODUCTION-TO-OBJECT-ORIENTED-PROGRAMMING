@@ -1,0 +1,78 @@
+hasenaar
+
+
+HumanSpaceShip.java:   In this file we implemented the Human Space Ship class. 
+This is a subclass of Spaceship and the human space ship is controlled by the user. 
+ 
+BasherSpaceShip.java:   In this file we implemented the Basher Space Ship class.
+This is a subclass of Spaceship. The basher pilot always try to bash the closest space ship.
+
+AggressiveSpaceShip.java:   In this file we implemented the Aggressive Space Ship class. 
+This is a subclass of Spaceship. The aggressive pilot always try to shoot at the closest space ship.
+
+RunnerSpaceShip.java:   In this file we implemented the Runner Space Ship class.
+This is a subclass of Spaceship. The runner pilot always try to run away from the fight. 
+
+DrunkardSpaceShip.java:   In this file we implemented the Drunkard Space Ship class.
+This is a subclass of Spaceship. The drunkard pilot acts randomly. 
+
+SpecialSpaceShip.java:   In this file we implemented the Special Space Ship class.
+This is a subclass of Spaceship. The special pilot has attributes of all the other space ship types, 
+except the human one. 
+
+SpaceShip.java:   In this file we implemented the Space Ship abstract class which 
+all the other space ship types classes inherit from it. This class represents the structure all 
+space ships types have. 
+
+SpaceShipFactory.java:   in this file we implemented the Space Ship Factory class. 
+The factory recieves an array of ships types strings and returns the relevant space ships array
+
+README:   This file. 
+
+
+
+Design:   I decided to make the SpaceShip class an abstract class that all the other space ships 
+types are subclasses of this class that inherit from it. 
+I decided to do so in oorder to prevent code repetitions, because all the different space ship types 
+have the same structure and physics, but they differ from each other only in their strategy. 
+
+As a result, it is much more easy to understand the code, because in this way in any subclass I 
+emphasized the uniqueness of the pilot type and strategy. 
+
+However, if I had chosen to use interface, it would have been much more difficult and won't prevent 
+code repetitions. 
+
+In SpaceShip class, I used many abstract methods, and all of them are related to the space ships' strategies. 
+In this way I promoted the modularity of my code. 
+
+In addition, in this way of using an abstract general class that all the different pilots types inherit from, 
+it is much more easy to add more strategies and pilots types, and thus the code is very extensible. 
+
+
+Implementation Issues:   I had some implementation issues while implementing the drunkard pilot: 
+In order to make it behave randomly I wrote functions that pick up randomly an item from an array 
+of ints (-1 as right turn, 0 as no turn and 1 as left turn) and from an array of booleans, true or false. 
+
+
+
+Answers to Questions:   I implemented the Drunkard Space Ship in this way: 
+
+In order to make it hard to predict the drunkard behaviour, I used the Random library of Java: 
+I wrote functions that pick up randomly an item from an array of ints (-1 as right turn, 0 as no turn 
+and 1 as left turn) and from an array of booleans (2 trues and 5 falses), and I used them in order to 
+create the drunkard's move in each round. 
+I decided that the chances to get "false" will be bigger than the chances to get "true", so that the drunkard 
+won't waste all its current energy fast by teleporting, shooting and using its shields a lot, because otherwise 
+it would be much easier to predict its moves (most of the time the drunkard won't have enough energy to do 
+anything). 
+
+
+
+I implemented the Special Space Ship in this way: 
+
+I made the special pilot a combination of all the other strategies: 
+The special pilot teleports as a Runner, uses its shields and turns as a Basher, shoots (and turns) as an aggressive, 
+and accelerate as a drunkard. As a results, the special pilot gets all the advantages of the other pilots types: 
+It runs away from the fight when it is in a dangerous position (as a runner), it bashes as a basher and shoots 
+aggressively as an aggressive, and it is also hard to predict when it will accelerate, as a drunkard. 
+Thus, it gets a unique strategy which it is hard to cope with. 

@@ -1,0 +1,40 @@
+hasenaar
+
+
+Board.java:   in this file we implemented the board class.
+ 
+Competition.java:   in this file we implemented the competition class.
+
+Player.java:   in this file we implemented the player class. 
+
+Move.java:   in this file we implemented the move class. 
+
+README:   this file. 
+
+
+
+Design:   I used the API that was given in advance.
+
+
+
+Implementation Issues:   I had some implementation issues while implementing the random 
+
+player: in order to make a random move, I decided to use three random numbers: the row number, 
+
+the leftmost stick number and the rightmost stick number. Thus I had to assure that those three 
+
+numbers represent a valid move. So first I picked the random row number from the relevant ints 
+
+range, then I picked the random leftmost stick number, and finally I picked the random rightmost 
+
+stick number, and checked that there are no marked sticks in between. 
+
+
+
+Answers to Questions:   I implemented the smart player in this way: 
+
+The smart player picks his moves by counting the number of unmarked sticks, 
+
+and marking a stick so that the number of the remaining sticks is odd.
+
+If it is not possible to do so - then the smart player makes a random move. 

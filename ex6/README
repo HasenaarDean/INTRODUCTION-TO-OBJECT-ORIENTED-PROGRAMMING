@@ -1,0 +1,146 @@
+hasenaar
+sfhr.8fy8_a
+
+
+=================
+===== FILES =====
+=================
+
+___Package main:____
+
+Sjavac.java - This class contains the main method of the program which starts the process of reading and
+checking the S-java code file received from user, and throwing exceptions if an error is found.
+
+Reader.java- This class represents the Reader which receives a file of code, reads and parses it,
+and sends it to translation.
+
+Translator.java - This class represents the translator which receives lines representing code components and
+translate(create) them into suitable objects (Block or Method).
+
+CodeComponent.java - This class represents a general code component.
+RegexPatternsForMain.java - Contains the regex patterns used in this package.
+MainScopeException.java - A general exception in reading the main block.
+BadLineFormatException.java - If line is written badly and does not match any code component.
+CannotResolveSymbolException.java - When a method or a variable, that do not exist, are being called.
+FlowBlockNotInMethodException.java - When flow block is written outside of a method.
+ReturnStatementMissingException.java - If a return statement at the end of method is missing.
+
+
+___Package blocks:___
+
+Block.java - This class represent a general block in the code.
+FlowBlock.java - This class represents a flow block (if or while block).
+MainBlock.java - This class represents the most outer block of the code.
+Method.java - This class represents a method in the code.
+BlockFactory.java - A utilities class with a Block objects factory, which creates a Block object
+according to the values received.
+RegexPatternsForBlocks.java - This class contains all the regex patterns used in this package.
+MethodException.java - This class represents a general exception in a block .
+BlockTypeException.java - If block type is invalid.
+IllegalMethodCallParameters.java - In case a method receives an illegal parameter in method call.
+IllegalMethodNameException.java - In case the name of a method is invalid.
+ParametersInFlowBlockAreNotBoolean.java - n case flow block receives not a boolean parameter.
+VarMultipleInitializationException.java - n case that a variable is over used.
+
+
+___Package variable:___
+
+Variable.java - This class is an abstract class represents a generic variable.
+BoolVariable.java - This class represents a boolean variable.
+CharVariable.java - This class represents a char variable.
+DoubleVariable.java - This class represents a double variable
+IntVariable.java - This class represents an int variable
+StrVariable.java - This class represents a string variable
+RegexPatternsForVariable.java - This class contains all regex patterns used in this package
+VarFactory.java - This class represents the variables factory.
+VariableException.java - This class represents a general exception in variable.
+IllegalNamException.java - If name of variable is illegal.
+IllegalTypeException.java - If type of variable is illegal.
+IllegalValueException.java - If value of variable is illegal.
+ReassignmentOfFinalVariableException.java - If a final variable was assignment more than once.
+UninitializedFinalVariableException.java - If an uninitialized final variable was used.
+UsingUninitializedVariableException.java - If an uninitialized variable was used.
+
+
+
+=================
+===== DESIGN ====
+=================
+
+We decided to split our program into three packages: main, blocks, variable.
+Each package is responsible for a different part of the exercise.
+The 'main' package is the main package of this program: it runs the program and it contains classes which
+are responsible for receiving S-java code file from user and translating it into CodeComponent objects.
+Then, it processes (by using the variable and blocks packages) the file and checks its validity.
+We tried to make our program as modular as possible, so that every part will be independent and will not
+need other parts in order to work properly. This made the debugging process a lot easier for us.
+
+
+=============================================
+== Description of the exceptions hierarchy ==
+=============================================
+
+The abstract parent Exceptions classes are MainScopeException, MethodException and VariableException which
+inherit java's Exception class. All other exceptions inherit from these Exceptions.
+We chose this design because in this way we can handle each warning and error in the most
+suitable place and way for it. This makes our code more readable and easy to understand.
+
+
+
+============================================================
+== How would we modify our code to add types of variables ==
+============================================================
+
+In order to do so, we will add to the Enum class we created for types of variables (within the Variable class)
+another type. In addition, we will create another class which extends the abstract Variable class. the new
+class will represent the new variable type. finally, we will add the regex pattern that suits the value and
+the type name.
+
+
+
+============================================
+== Description of two extra modifications ==
+============================================
+
+different method types: 
+
+In order to support this feature, we would make the class Method an abstract class and each method type will
+extend from it, as same as we implemented the Variable class and all variables types. Hence, we will add to
+Method class an Enum class of all the method types. we will modify the Method class so that it would have
+another field that holds the type of the returned value of the method (because in this case not all the methods
+are in type void). Moreover, we will add a new method to Method class that checks whether or not a method
+returns a value which corresponds to the method defined type (or a type which is a parent of the method type).
+
+using methods of standard java:
+
+In order to support this feature, we will modify the Method class in this way: we will extend the regex
+patterns of the Block package and add regex patterns that suits the Standard Java methods names and syntax,
+so that our code will check validity of the method's name and method's type also for the standard java
+methods and in this way it will recognize their names.
+
+
+
+===============================================
+== Description of two regex patterns we used ==
+===============================================
+
+first line of if/while block: 
+
+"\\s*(if|while)\\s*\\((\\s*(\\S+|true|false)\\s*" +
+        "(\\s*(&&|\\|\\|)(\\s*(true|false|\\S+))\\s*)*)\\)\\s*\\{\\s*";
+
+As we can see, at the beginning of the line there might be an optional sequence of spaces (in all types of
+spaces), and then the word if or while must apear once, then between any expresion there might be a sequence
+of spaces (so we won't mention this fact again), then comes once an open parenthesis character, then there
+might appear a list of variables names or true or false separated by && or || and then there must be a closing
+parenthesis character and then {
+
+line of calling a method: 
+
+"\\s*(\\w+)\\s*\\(\\s*" +
+        "((\\S+\\s*)?(\\s*,\\s*\\S+\\s*)*)\\s*\\)\\s*;\\s*";
+
+between any expression there might be a sequence of spaces. then there must appear the name of the method
+so we used (\\w+). then there must come an opening parenthesis and then there might come a list of variables
+names separated by a coma (or only one variable without a coma or without any variable at all). then must
+come a closing parenthesis and then ;
